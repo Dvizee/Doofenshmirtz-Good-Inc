@@ -2,21 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Doofenshmirtz Evil Inc. Dashboard</title>
+    <title>Doofenshmirtz Good Inc. Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Doofenshmirtz Evil Inc. Dashboard</h1>
-<p>You are logged in. Welcome to my evil dashboard-inator</p>
+<h1>Doofenshmirtz Good Inc. Dashboard</h1>
+<p id="loggedinmessage">You are logged in. Welcome to my evil dashboard-inator</p>
 <button type="button" id="creditcardbutton">Credit card info</button>
 
 
 <div id="cardDisplay" style="color: white; margin-top: 20px;"></div>
 
 
-<script type="module" src="./js/database.js">
-import { creditcards } from "./js/database.js";
+<script>
+
+const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzJw-u7M3U4tzvVvvN4obrzjjrzGX4lxH-i5zH9DMzjJzl3vluM-PX0tfK7dmaAgd6eqA/exec";
+
+
+const username = sessionStorage.getItem("evilUsername");
+const password = sessionStorage.getItem("evilPassword");
+
+const loggedInAs = document.getElementById("loggedinmessage");
+loggedInAs.textContent = "You are logged in as " + username + ". Welcome to my good dashboard-inator"
+
+
+
+
 
 const btn = document.getElementById("creditcardbutton");
 const display = document.getElementById('cardDisplay');
@@ -24,8 +36,29 @@ btn.addEventListener("click", function() {
 showcards();
 });
 
-function showcards() {
-    display.innerText = "Doof: " + creditcards.doof + " \nVanessa: " + creditcards.vanessa;
+async function showcards() {
+    // If not logged in
+    if (!username || !password) {
+        cardDisplay.innerText = "Error: You must log in first!";
+        return;
+    }
+
+    btn.textContent = "Loading card...";
+
+    const response = await fetch(GOOGLE_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' }, 
+        body: JSON.stringify({ 
+            action: "getCard", 
+            username: username,
+            password: password
+        }) 
+    });
+
+    const data = await response.json();
+    btn.textContent = "Credit card info";
+
+    display.innerText = "Credit Card for " + username + ": " + data.card;
 }
 
 

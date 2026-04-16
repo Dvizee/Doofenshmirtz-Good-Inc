@@ -66,6 +66,9 @@ async function login() {
 
 
     if (data.success) {
+        // Session storage to validate when getting credit cards later.
+        sessionStorage.setItem("evilUsername", username);
+        sessionStorage.setItem("evilPassword", password);
         alert('Login successful!');
         // Redirect or show logged-in content
         // window.location.href = '/dashboard.html';
