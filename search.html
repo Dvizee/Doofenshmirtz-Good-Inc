@@ -29,13 +29,25 @@
  function doSearch() {
             const query = document.getElementById('searchInput').value;
             const filtered = games.filter(g => g.title.toLowerCase().includes(query.toLowerCase()));
-            let html = '<p>Results for: ' + query + '</p>';
+                
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            const label = document.createElement('p');
+            label.textContent = 'Results for: ' + query;
+            resultsDiv.appendChild(label);
+
             if (filtered.length > 0) {
-                filtered.forEach(g => { html += '<p>' + g.title + ' - ' + g.desc + '</p>'; });
+                filtered.forEach(g => {
+                    const p = document.createElement('p');
+                    p.textContent = g.title + ' - ' + g.desc;
+                    resultsDiv.appendChild(p);
+                });
             } else {
-                html += '<p>No results found.</p>';
-            }          
-                 document.getElementById('results').innerHTML = html;
+                const p = document.createElement('p');
+                p.textContent = 'No results found.';
+                resultsDiv.appendChild(p);
+            }
         }
     </script>
 </body>
