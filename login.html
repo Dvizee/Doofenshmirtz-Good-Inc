@@ -24,28 +24,48 @@
     <a href="logs.html">System Log Viewer</a>
 </div>
 
-<script type="module" src="./js/database.js">
-import { users } from './js/database.js';
+<script>
+    const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzJw-u7M3U4tzvVvvN4obrzjjrzGX4lxH-i5zH9DMzjJzl3vluM-PX0tfK7dmaAgd6eqA/exec";
+
 
     
 let attempts = 0;
-const maxAttempts = 5;
+const maxAttempts = 3;
 
 const btn = document.getElementById("button");
-btn.addEventListener("click", function() {
+btn.addEventListener("click", async function() {
   login();
 });
 
-function login() {
+async function login() {
     
     // Broken site, doesn't stop from bruteforce, or it'd have this
     if (attempts >= maxAttempts) {
 		alert("You've been locked out, please contact an administrator");
         return;
+    }
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+
+    btn.textContent = "Logging in...";
+
+    // Post request to database
+    const response = await fetch(GOOGLE_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' }, 
+        body: JSON.stringify({ 
+            action: "login", 
+            username: username, 
+            password: password 
+        }) 
+    });
     
-    if (users[username] && users[username] === password) {
+    const data = await response.json();
+    btn.textContent = "Login";
+
+
+
+    if (data.success) {
         alert('Login successful!');
         // Redirect or show logged-in content
         // window.location.href = '/dashboard.html';
