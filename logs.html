@@ -50,7 +50,7 @@
             margin: 25px auto;
         }
 
-        input[type="text"] {
+        select {
             width: 60%;
             max-width: 450px;
             padding: 10px;
@@ -74,7 +74,6 @@
             background-color: #256f37;
         }
 
-        .command-box,
         .output-box {
             width: 80%;
             max-width: 750px;
@@ -84,19 +83,11 @@
             text-align: left;
             white-space: pre-wrap;
             font-family: Consolas, monospace;
-        }
-
-        .command-box {
-          background-color: #2f2f2f;
-          border: 2px solid #6b7280;
-          color: #f3f4f6;
-        }
-
-        .output-box {
             background-color: #1a1033;
             border: 2px solid #2f8f46;
             color: #ffffff;
             min-height: 140px;
+            box-sizing: border-box;
         }
 
         .note {
@@ -109,8 +100,8 @@
 <body>
 
     <div class="container">
-        <h1>Evil System Log Viewer</h1>
-        <p>Search internal server logs by filename</p>
+        <h1>Good System Log Viewer</h1>
+        <p>View internal server logs</p>
 
         <div class="nav-links">
             <a href="index.html">Home</a>
@@ -120,59 +111,49 @@
         </div>
 
         <div class="form-box">
-            <input type="text" id="logInput" placeholder="Enter log filename">
-            <button onclick="viewLogs()">Search Nefarious Logs</button>
+            <select id="logSelect">
+                <option value="">Select a log file</option>
+                <option value="access.log">access.log</option>
+                <option value="security.log">security.log</option>
+                <option value="inator.log">inator.log</option>
+            </select>
+            <button onclick="viewLogs()">View Virtuous Vault Values</button>
         </div>
 
-        <div class="output-box" id="outputBox">No log search has been run yet.</div>
-        <div class="command-box" id="commandBox" style="display: none;"></div>
+        <div class="output-box" id="outputBox">No log file selected yet.</div>
 
-        <p class="note">Evil log access portal.</p>
+        <p class="note">Only approved log files can be viewed.</p>
     </div>
 
     <script>
         function viewLogs() {
-            const input = document.getElementById("logInput").value.trim();
-            const commandBox = document.getElementById("commandBox");
+            const selectedLog = document.getElementById("logSelect").value;
             const outputBox = document.getElementById("outputBox");
 
-            if (!input) {
-                commandBox.style.display = "none";
-                outputBox.textContent = "Please enter a log filename.";
+            if (!selectedLog) {
+                outputBox.textContent = "Please select a log file.";
                 return;
             }
 
-            const unsafeCommand = "cat /var/log/" + input;
-            commandBox.style.display = "block";
-            commandBox.textContent = "[Executed command:]\n" + unsafeCommand;
+            let output = "Viewing: " + selectedLog + "\n\n";
 
-            let output = "Showing results for: " + input + "\n\n";
-
-            if (input.includes("&&") || input.includes(";") || input.includes("|")) {
-                output +=
-                    "[access.log]\n" +
-                    "192.168.1.15 - GET /dashboard 200\n" +
-                    "192.168.1.18 - POST /login 302\n\n" +
-                    "[Injected command output]\n" +
-                    "doof-admin\n" +
-                    "EVIL-INC-SERVER-01\n";
-            } else if (input === "access.log") {
+            if (selectedLog === "access.log") {
                 output +=
                     "192.168.1.15 - GET /dashboard 200\n" +
                     "192.168.1.18 - POST /login 302\n" +
                     "192.168.1.22 - GET /search?q=inator 200";
-            } else if (input === "security.log") {
+            } else if (selectedLog === "security.log") {
                 output +=
                     "Failed login for user: perry\n" +
                     "Password attempt threshold exceeded for user: candace\n" +
                     "Alert: suspicious query parameter on /search";
-            } else if (input === "inator.log") {
+            } else if (selectedLog === "inator.log") {
                 output +=
                     "Laser-Inator calibration complete.\n" +
                     "Shrink-Inator power levels stable.\n" +
                     "Chicken-Replace-Inator maintenance scheduled.";
             } else {
-                output += "No matching log file was found.";
+                output += "Invalid log selection.";
             }
 
             outputBox.textContent = output;
