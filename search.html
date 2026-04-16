@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doofenshmirtz Evil Inc. - Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+    </nav>
+
+    <h1>Search Evil Plans & Games</h1>
+    <p>Find Phineas and Ferb games and Doofenshmirtz evil plans</p>
+
+    <input type="text" id="searchInput" placeholder="Search...">
+    <button onclick="doSearch()">Search</button>
+
+    <div id="results"></div>
+    <script>
+        const games = [
+            { title: "Coolest Coaster Ever", desc: "Design your own roller coaster-inator!" },
+            { title: "Tower-Inator", desc: "Build the ultimate evil tower!" },
+            { title: "Agent P's Hideout", desc: "Find Perry the Platypus's secret lair!" },
+            { title: "Robot Attack", desc: "Unleash the robots on the Tri-State Area!" },
+            { title: "Inator Overload", desc: "Control all the inators at once!" }
+        ];
+ function doSearch() {
+            const query = document.getElementById('searchInput').value;
+            const filtered = games.filter(g => g.title.toLowerCase().includes(query.toLowerCase()));
+            let html = '<p>Results for: ' + query + '</p>';
+            if (filtered.length > 0) {
+                filtered.forEach(g => { html += '<p>' + g.title + ' - ' + g.desc + '</p>'; });
+            } else {
+                html += '<p>No results found.</p>';
+            }          
+                 document.getElementById('results').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

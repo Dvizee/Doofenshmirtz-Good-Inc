@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doofenshmirtz Evil Inc. Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Doofenshmirtz Evil Inc. Dashboard</h1>
+<p>You are logged in. Welcome to my evil dashboard-inator</p>
+<button type="button" id="creditcardbutton">Credit card info</button>
+
+
+<div id="cardDisplay" style="color: white; margin-top: 20px;"></div>
+
+
+<script type="module" src="./js/database.js">
+import { creditcards } from "./js/database.js";
+
+const btn = document.getElementById("creditcardbutton");
+const display = document.getElementById('cardDisplay');
+btn.addEventListener("click", function() {
+showcards();
+});
+
+function showcards() {
+    display.innerText = "Doof: " + creditcards.doof + " \nVanessa: " + creditcards.vanessa;
+}
+
+
+    
+</script>
+
+<div class="footer-links"></div>
+    <a href="login.html">Logout</a>
+    <a href="coaster.html">Coaster</a>
+    <a href="search.html">Search</a>
+    <a href="logs.html">System Log Viewer</a>
+</div>
+
+
+
+
+
+<img src="resources/Doofenshmirtz_Portrait.webp" width="300" height="300">
+
+
+
+</body>
+</html>

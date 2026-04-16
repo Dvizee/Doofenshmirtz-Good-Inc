@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doofenshmirtz Evil Inc.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Doofenshmirtz Evil Inc.</h1>
+<p>Login to my evil website</p>
+
+<label for="username">Username:</label>
+<input type="text" id="username" name="user_name">
+
+<label for="password">Password:</label>
+<input type="text" id="password" name="pass_word">
+
+<button type="button" id="button">Login</button>
+<div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="coaster.html">Coaster</a>
+    <a href="search.html">Search</a>
+    <a href="logs.html">System Log Viewer</a>
+</div>
+
+<script type="module" src="./js/database.js">
+import { users } from './js/database.js';
+
+    
+let attempts = 0;
+const maxAttempts = 5;
+
+const btn = document.getElementById("button");
+btn.addEventListener("click", function() {
+  login();
+});
+
+function login() {
+    
+    // Broken site, doesn't stop from bruteforce, or it'd have this
+    if (attempts >= maxAttempts) {
+		alert("You've been locked out, please contact an administrator");
+        return;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (users[username] && users[username] === password) {
+        alert('Login successful!');
+        // Redirect or show logged-in content
+        // window.location.href = '/dashboard.html';
+        alert("good job");
+         window.location.href = "dashboard.html";
+    } else {
+        attempts += 1;
+        alert('Invalid username or password');
+    }
+}
+</script>
+
+</body>
+</html>

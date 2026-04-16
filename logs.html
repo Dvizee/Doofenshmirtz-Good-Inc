@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Log Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2d1b4e;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            padding: 30px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            margin-bottom: 30px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 10px 18px;
+            background-color: #2f8f46;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            background-color: #256f37;
+        }
+
+        .form-box {
+            margin: 25px auto;
+        }
+
+        input[type="text"] {
+            width: 60%;
+            max-width: 450px;
+            padding: 10px;
+            border: 2px solid #2f8f46;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin-left: 10px;
+            background-color: #2f8f46;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #256f37;
+        }
+
+        .command-box,
+        .output-box {
+            width: 80%;
+            max-width: 750px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            white-space: pre-wrap;
+            font-family: Consolas, monospace;
+        }
+
+        .command-box {
+          background-color: #2f2f2f;
+          border: 2px solid #6b7280;
+          color: #f3f4f6;
+        }
+
+        .output-box {
+            background-color: #1a1033;
+            border: 2px solid #2f8f46;
+            color: #ffffff;
+            min-height: 140px;
+        }
+
+        .note {
+            margin-top: 20px;
+            color: #b8f5c5;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Evil System Log Viewer</h1>
+        <p>Search internal server logs by filename</p>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="search.html">Search</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+
+        <div class="form-box">
+            <input type="text" id="logInput" placeholder="Enter log filename">
+            <button onclick="viewLogs()">Search Nefarious Logs</button>
+        </div>
+
+        <div class="output-box" id="outputBox">No log search has been run yet.</div>
+        <div class="command-box" id="commandBox" style="display: none;"></div>
+
+        <p class="note">Evil log access portal.</p>
+    </div>
+
+    <script>
+        function viewLogs() {
+            const input = document.getElementById("logInput").value.trim();
+            const commandBox = document.getElementById("commandBox");
+            const outputBox = document.getElementById("outputBox");
+
+            if (!input) {
+                commandBox.style.display = "none";
+                outputBox.textContent = "Please enter a log filename.";
+                return;
+            }
+
+            const unsafeCommand = "cat /var/log/" + input;
+            commandBox.style.display = "block";
+            commandBox.textContent = "[Executed command:]\n" + unsafeCommand;
+
+            let output = "Showing results for: " + input + "\n\n";
+
+            if (input.includes("&&") || input.includes(";") || input.includes("|")) {
+                output +=
+                    "[access.log]\n" +
+                    "192.168.1.15 - GET /dashboard 200\n" +
+                    "192.168.1.18 - POST /login 302\n\n" +
+                    "[Injected command output]\n" +
+                    "doof-admin\n" +
+                    "EVIL-INC-SERVER-01\n";
+            } else if (input === "access.log") {
+                output +=
+                    "192.168.1.15 - GET /dashboard 200\n" +
+                    "192.168.1.18 - POST /login 302\n" +
+                    "192.168.1.22 - GET /search?q=inator 200";
+            } else if (input === "security.log") {
+                output +=
+                    "Failed login for user: perry\n" +
+                    "Password attempt threshold exceeded for user: candace\n" +
+                    "Alert: suspicious query parameter on /search";
+            } else if (input === "inator.log") {
+                output +=
+                    "Laser-Inator calibration complete.\n" +
+                    "Shrink-Inator power levels stable.\n" +
+                    "Chicken-Replace-Inator maintenance scheduled.";
+            } else {
+                output += "No matching log file was found.";
+            }
+
+            outputBox.textContent = output;
+        }
+    </script>
+
+</body>
+</html>
